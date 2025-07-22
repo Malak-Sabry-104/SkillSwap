@@ -50,8 +50,8 @@
 | Styling | **Tailwind CSS** |
 | Routing | React Router |
 | State Management | React Context (Auth State) |
-| Feedback | Toasts, Modals |
-| Hosting | Netlify / Vercel (suggested) |
+| Feedback | Toasts |
+| Hosting | Netlify /  |
 
 ---
 
