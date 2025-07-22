@@ -1,69 +1,64 @@
-# React + TypeScript + Vite
+# 🔁 SkillSwap — Trade Skills, Learn Freely
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**SkillSwap** is a community platform where users can offer their skills (like guitar, drawing, coding) and browse others' to request them in return. It encourages learning and sharing through peer-to-peer skill exchange — no payment, just passion.
 
-Currently, two official plugins are available:
+>— Trade Skills. Learn Freely.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🌟 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- ✍️ Offer any skill with a description, level, and category
+- 🔍 Browse skills with filters (category, level, search)
+- 📄 View full details of any skill
+- 🙋‍♀️ "Request" skills (simulated UI interaction)
+- 🛠️ Manage your own skills — edit, delete, update
+- 🔒 Login and register to offer or manage skills
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 👥 Target Users
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+| 👤 User Type | 💡 Value Proposition |
+|-------------|-----------------------|
+| **Learners** | Discover new skills and request help from real people |
+| **Sharers**  | Offer their skills to help others and build a portfolio |
+| **Hobbyists** | Exchange knowledge without money involved |
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🗺️ Pages (MVP)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- `/` - Home Page (Hero + Featured + How it Works)
+- `/browse` - Browse All Skills
+- `/skill/:id` - Skill Details Page
+- `/offer` - Offer a New Skill _(requires login)_
+- `/my-skills` - Manage Your Offered Skills _(requires login)_
+- `/login` - Login
+- `/register` - Register
+- `/about` - About the Platform
+- `*` - 404 Not Found Page
+
+---
+
+## 💻 Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend Framework | **React** |
+| Language | **TypeScript** |
+| Styling | **Tailwind CSS** |
+| Routing | React Router |
+| State Management | React Context (Auth State) |
+| Feedback | Toasts |
+| Hosting | Netlify /  |
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/your-username/skillswap.git
+cd skillswap
+npm install
+npm run dev
