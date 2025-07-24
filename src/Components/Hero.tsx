@@ -24,7 +24,7 @@ const Hero = () => {
             Explore Skills
           </a>
           <a
-            href="/"
+            href="/offer"
             className="text-xs md:text-md text-center relative z-20 bg-transparent text-white/60 py-3 px-6 rounded-lg font-semibold transition duration-300 ease-in-out hover:shadow-lg hover:shadow-yellow-400/30 transform hover:-translate-y-1 hover:scale-100 focus:outline-none ring-2 ring-yellow-400/30"
           >
             Offer a Skill

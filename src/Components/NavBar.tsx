@@ -2,7 +2,7 @@ import { useState } from "react";
 import { LogOut, User } from "lucide-react";
 
 const NavBar = () => {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const userName = "John Doe";
   const [isOpen, setIsOpen] = useState(false);
 
@@ -63,12 +63,12 @@ const NavBar = () => {
                   Offer Skill
                 </a>
 
-                <button
-                  onClick={() => alert("Logging out...")}
-                  className="text-gray-300 hover:text-red-500 transition"
+                <a
+href="/login"
+className="text-gray-300 hover:text-red-500 transition"
                 >
                   <LogOut className="h-5 w-5" />
-                </button>
+                </a>
               </>
             ) : (
               <>
@@ -159,12 +159,9 @@ const NavBar = () => {
                 >
                   Offer Skill
                 </a>
-                <button
-                  onClick={() => alert("Logging out...")}
-                  className="text-red-400 px-2 text-left"
-                >
+                <a href="/login" className="text-red-400 px-2 text-left">
                   Logout
-                </button>
+                </a>
               </>
             ) : (
               <>

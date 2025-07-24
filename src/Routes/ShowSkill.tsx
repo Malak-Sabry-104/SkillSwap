@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, User, Clock } from "lucide-react";
+import { toast } from "react-toastify";
 
 const allSkills = [
   {
@@ -19,7 +20,8 @@ const allSkills = [
     level: "Advanced",
     duration: "2 hours",
     userName: "Robert Wilson",
-    description: "Master advanced piano finger techniques, scales, and improvisation.",
+    description:
+      "Master advanced piano finger techniques, scales, and improvisation.",
   },
   {
     id: 3,
@@ -37,7 +39,8 @@ const allSkills = [
     level: "Intermediate",
     duration: "1.5 hours",
     userName: "James Brown",
-    description: "Understand notes, chords, and rhythm patterns to read sheet music.",
+    description:
+      "Understand notes, chords, and rhythm patterns to read sheet music.",
   },
 ];
 
@@ -52,7 +55,7 @@ export default function SkillDetailPage() {
 
   if (!skill) {
     return (
-      <div className="text-center text-yellow-200 py-12 ">
+      <div className="text-center text-yellow-200 py-12 mt-[5rem]">
         <h1 className="text-3xl font-bold mb-4">Skill Not Found</h1>
         <button
           onClick={() => navigate("/skills")}
@@ -105,14 +108,21 @@ export default function SkillDetailPage() {
               </div>
             </div>
 
-            <button className="bg-yellow-400 text-black px-6 py-2 rounded-lg hover:bg-yellow-300 transition font-semibold">
+            <button
+              onClick={() => {
+                toast.success(" Skill Requested Successfully!");
+              }}
+              className="cursor-pointer bg-yellow-400 text-black px-6 py-2 rounded-lg hover:bg-yellow-300 transition font-semibold"
+            >
               Request This Skill
             </button>
           </div>
 
           {/* Right Side - More Skills */}
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">More {skill.category} Skills</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              More {skill.category} Skills
+            </h2>
             {related.map((s) => (
               <div
                 key={s.id}

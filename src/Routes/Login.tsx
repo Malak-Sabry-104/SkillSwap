@@ -43,7 +43,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+    <div className="mt-[4rem] min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
       {/* Background orbs */}
       <div className="absolute w-[700px] h-[700px] bg-yellow-300 rounded-full top-[-150px] left-[-200px] blur-3xl opacity-30"></div>
       <div className="absolute w-[600px] h-[600px] bg-yellow-200 rounded-full bottom-[-200px] right-[-150px] blur-3xl opacity-30"></div>

@@ -60,7 +60,7 @@ const FeaturedSkills = () => {
                   <p className="text-sm text-yellow-400">{data.desc}</p>
                 </div>
 
-                <div className="p-6 pt-0 border-t border-yellow-700/30 flex justify-between items-center">
+                <div className="pt-4 p-6  border-t border-yellow-700/30 flex justify-between items-center">
                   <div className="text-sm text-yellow-400 leading-tight">
                     <p className="font-medium">{data.author}</p>
                     <p>{data.time}</p>
