@@ -6,8 +6,11 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
-            <a href="/" className="text-2xl font-bold text-yellow-400 mb-4 block">
-              SkillSwap
+            <a
+              href="/"
+              className="text-2xl font-bold text-yellow-400 mb-4 block"
+            >
+              skillswapy
             </a>
             <p className="text-white/60 mb-4">
               Connecting people through skill sharing and collaborative
@@ -37,7 +40,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="mailto:hello@skillswap.com"
+                href="mailto:hello@skillswapy.com"
                 className="text-gray-400 hover:text-white/60 transition-colors"
               >
                 <svg
@@ -119,7 +122,7 @@ const Footer = () => {
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-white/60 text-sm">
-            © 2025 SkillSwap. Built with{" "}
+            © 2025 skillswapy. Built with{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

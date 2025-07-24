@@ -9,8 +9,11 @@ const NavBar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <a href="/" className="text-3xl font-bold text-yellow-400 tracking-wide">
-            SkillSwap
+          <a
+            href="/"
+            className="text-3xl font-bold text-yellow-400 tracking-wide"
+          >
+            skillswapy
           </a>
 
           {/* Nav Links */}

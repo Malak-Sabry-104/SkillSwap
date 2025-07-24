@@ -1,8 +1,8 @@
-# 🔁 SkillSwap — Trade Skills, Learn Freely
+# 🔁 skillswapy — Trade Skills, Learn Freely
 
-**SkillSwap** is a community platform where users can offer their skills (like guitar, drawing, coding) and browse others' to request them in return. It encourages learning and sharing through peer-to-peer skill exchange — no payment, just passion.
+**skillswapy** is a community platform where users can offer their skills (like guitar, drawing, coding) and browse others' to request them in return. It encourages learning and sharing through peer-to-peer skill exchange — no payment, just passion.
 
->— Trade Skills. Learn Freely.
+> — Trade Skills. Learn Freely.
 
 ---
 
@@ -19,11 +19,11 @@
 
 ## 👥 Target Users
 
-| 👤 User Type | 💡 Value Proposition |
-|-------------|-----------------------|
-| **Learners** | Discover new skills and request help from real people |
-| **Sharers**  | Offer their skills to help others and build a portfolio |
-| **Hobbyists** | Exchange knowledge without money involved |
+| 👤 User Type  | 💡 Value Proposition                                    |
+| ------------- | ------------------------------------------------------- |
+| **Learners**  | Discover new skills and request help from real people   |
+| **Sharers**   | Offer their skills to help others and build a portfolio |
+| **Hobbyists** | Exchange knowledge without money involved               |
 
 ---
 
@@ -43,22 +43,23 @@
 
 ## 💻 Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend Framework | **React** |
-| Language | **TypeScript** |
-| Styling | **Tailwind CSS** |
-| Routing | React Router |
-| State Management | React Context (Auth State) |
-| Feedback | Toasts |
-| Hosting | Netlify /  |
+| Layer              | Technology                 |
+| ------------------ | -------------------------- |
+| Frontend Framework | **React**                  |
+| Language           | **TypeScript**             |
+| Styling            | **Tailwind CSS**           |
+| Routing            | React Router               |
+| State Management   | React Context (Auth State) |
+| Feedback           | Toasts                     |
+| Hosting            | Netlify /                  |
 
 ---
 
 ## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/your-username/skillswap.git
-cd skillswap
+git clone https://github.com/your-username/skillswapy.git
+cd skillswapy
 npm install
 npm run dev
+```
