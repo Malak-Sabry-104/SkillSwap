@@ -1,1 +1,26 @@
 @import "tailwindcss";
+@layer base {
+  body {
+    @apply bg-black overflow-x-hidden text-white;
+  }
+
+
+}
+.brain-icon {
+  animation: floaty 2s ease-in-out infinite;
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+
+
+
+
