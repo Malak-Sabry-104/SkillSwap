@@ -21,6 +21,19 @@
 }
 
 
-
+  @keyframes stars {
+          0% { background-position: 0 0; }
+          100% { background-position: -1000px 1000px; }
+        }
+        .animate-stars {
+          animation: stars 100s linear infinite;
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
 
 

@@ -12,7 +12,7 @@ const techStack = [
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-8 text-white/50 ">
+    <div className="container mx-auto px-4 py-8 text-white/50  mt-[4rem]">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -60,7 +60,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-4 p-6">
             {techStack.map((tech) => (
               <div key={tech.name} className="flex items-start gap-3 p-3 rounded-lg ">
-                <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full ring-2 ring-white/10 bg-[#4c2346] text-white/50">
+                <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full ring-2 ring-white/10 bg-yellow-400/50 text-white/50">
                   {tech.name}
                 </span>
                 <p className="text-sm text-white/60">{tech.description}</p>
@@ -131,7 +131,7 @@ export default function AboutPage() {
         <div className="text-center mt-8">
           <a
             href="/"
-            className="inline-block px-6 py-3 bg-[#3F1F50] text-white rounded-lg text-lg font-semibold  transition"
+            className="inline-block px-6 py-3 bg-yellow-400/50 text-white rounded-lg text-lg font-semibold  transition"
           >
             Back to Home
           </a>

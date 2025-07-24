@@ -52,7 +52,7 @@ export default function SkillDetailPage() {
 
   if (!skill) {
     return (
-      <div className="text-center text-yellow-200 py-12">
+      <div className="text-center text-yellow-200 py-12 ">
         <h1 className="text-3xl font-bold mb-4">Skill Not Found</h1>
         <button
           onClick={() => navigate("/skills")}
@@ -65,7 +65,7 @@ export default function SkillDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] text-yellow-100 px-6 py-12">
+    <div className="pt-[6rem] min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] text-yellow-100 px-6 py-12">
       <div className="max-w-6xl mx-auto">
         <button
           onClick={() => navigate("/skills")}

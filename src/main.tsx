@@ -9,18 +9,21 @@ import About from './Routes/About.tsx'
 import Skill from './Routes/Skill.tsx'
 import Login from './Routes/Login.tsx'
 import Register from './Routes/Register.tsx'
+import Layout from './Components/Layout.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BrowserRouter>
       <Routes>
+          <Route path="/" element={<Layout/>}>
         <Route path="/skills" element={<Skills />} />
-        <Route path="/" element={<App />} />
-        <Route path="/about-us" element={<About />} />
+        <Route index element={<App />} />
+        <Route path="/about" element={<About />} />
         <Route path="/skill/:id" element={<Skill />} />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/sign-up" element={<Register />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
       </Routes>
     </BrowserRouter>
   </StrictMode>

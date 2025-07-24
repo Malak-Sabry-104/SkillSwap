@@ -83,12 +83,12 @@ export default function SignUpCard() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
+    <div className=" pt-[5rem] min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
       {/* Background planets */}
       <div className="absolute w-[700px] h-[700px] bg-yellow-300 rounded-full top-[-150px] left-[-200px] blur-3xl opacity-30"></div>
       <div className="absolute w-[600px] h-[600px] bg-yellow-200 rounded-full bottom-[-200px] right-[-150px] blur-3xl opacity-30"></div>
 
-      <div className="relative bg-black/30 backdrop-blur-md border border-white/10 p-10 rounded-3xl shadow-xl w-[400px] text-white">
+      <div className="my-[3rem] relative bg-black/30 backdrop-blur-md border border-white/10 p-10 rounded-3xl shadow-xl w-[400px] text-white">
         <div className="text-center mb-6">
           <div className="text-5xl mb-4">🪐</div>
           <h2 className="text-2xl font-semibold">Saturn</h2>

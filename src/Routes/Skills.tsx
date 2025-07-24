@@ -106,9 +106,9 @@ export default function BrowseSkillsPage() {
   }, [searchTerm, selectedCategory, selectedLevel]);
 
   return (
-    <div className="container mx-auto px-4 py-10 text-white">
+    <div className="container mx-auto px-4 py-10 text-white mt-[5rem]">
       <h1 className="text-4xl font-bold mb-10 text-center bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-transparent bg-clip-text drop-shadow-lg">
-        Browse Premium Skills
+        Discover Skills
       </h1>
 
       {/* Search */}
