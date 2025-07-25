@@ -1,6 +1,19 @@
-import { createContext, useContext, useState,type ReactNode } from "react";
+import { createClient } from '@supabase/supabase-js';
+import React, { createContext, useContext } from 'react';
 
-// Define the Skill type
+const supabaseUrl = 'https://maczizzuefqzxskcnacv.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hY3ppenp1ZWZxenhza2NuYWN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0NjAzMDYsImV4cCI6MjA2OTAzNjMwNn0.jeGPRgWn-pwFoKWZ6T2Y344dV8wfX4O1_cIHfDntTNg';
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const SupabaseContext = createContext(supabase);
+
+export const SupabaseProvider = ({ children }: { children: React.ReactNode }) => (
+  <SupabaseContext.Provider value={supabase}>{children}</SupabaseContext.Provider>
+);
+
+export const useSupabase = () => useContext(SupabaseContext);
+
 export type Skill = {
   id: number;
   title: string;
@@ -10,23 +23,20 @@ export type Skill = {
   duration: string;
 };
 
-// Define the shape of the context
 interface SkillContextType {
   skills: Skill[];
   addSkill: (skill: Skill) => void;
   removeSkill: (id: number) => void;
 }
 
-// Create the context with default values
 const SkillContext = createContext<SkillContextType>({
   skills: [],
   addSkill: () => {},
   removeSkill: () => {},
 });
 
-// Create provider
-export const SkillProvider = ({ children }: { children: ReactNode }) => {
-  const [skills, setSkills] = useState<Skill[]>([]);
+export const SkillProvider = ({ children }: { children: React.ReactNode }) => {
+  const [skills, setSkills] = React.useState<Skill[]>([]);
 
   const addSkill = (skill: Skill) => {
     setSkills((prev) => [...prev, skill]);
@@ -43,5 +53,4 @@ export const SkillProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook for easier usage
 export const useSkillContext = () => useContext(SkillContext);
