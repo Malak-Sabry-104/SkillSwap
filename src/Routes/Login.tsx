@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useSupabase } from '../Components/SkillContext';
 
 const Login = () => {
+  const supabase = useSupabase();
   const [form, setForm] = useState({ usernameOrEmail: "", password: "", remember: false });
-  const [errors, setErrors] = useState({ usernameOrEmail: "", password: "" });
+  const [errors, setErrors] = useState({ usernameOrEmail: "", password: "", general: "" });
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
-    const newErrors = { usernameOrEmail: "", password: "" };
+    const newErrors = { usernameOrEmail: "", password: "", general: "" };
     let isValid = true;
 
     if (!form.usernameOrEmail.trim()) {
@@ -33,13 +36,21 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    if (validate()) {
-      // Proceed with login
-      alert("Form is valid! Submitting...");
-      // You can send the form data to your API here
+    if (!validate()) return;
+    setLoading(true);
+    setErrors((prev) => ({ ...prev, general: "" }));
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.usernameOrEmail,
+      password: form.password,
+    });
+    if (error) {
+      setErrors((prev) => ({ ...prev, general: error.message }));
+    } else {
+      window.location.href = "/";
     }
+    setLoading(false);
   };
 
   return (
@@ -101,17 +112,19 @@ const Login = () => {
             <label htmlFor="remember">Remember me</label>
           </div>
 
+          {errors.general && <p className="text-red-500 text-xs mt-1">{errors.general}</p>}
           <button
             type="submit"
             className="w-full py-2 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-200 text-black font-semibold mt-2 hover:opacity-90 transition"
+            disabled={loading}
           >
-            Log In
+            {loading ? 'Logging in...' : 'Log In'}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-300">
           Don’t have an account?{" "}
-          <a href="#" className="text-white font-semibold hover:underline">
+          <a href="/register" className="text-white font-semibold hover:underline">
             Sign Up
           </a>
         </p>
