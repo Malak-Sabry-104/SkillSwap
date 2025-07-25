@@ -15,6 +15,7 @@ import MySkills from "./Routes/MySkills.tsx";
 import Offer from "./Routes/Offer.tsx";
 
 import { SkillProvider } from "./Components/SkillContext.tsx"; // ✅ make sure the path is correct
+import RequestsPage from "./Routes/Requests.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -29,6 +30,8 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/my-skills" element={<MySkills />} />
             <Route path="/skill/:id" element={<Skill />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/requests" element={<RequestsPage />} />
+
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<ErrorPage />} />
           </Route>

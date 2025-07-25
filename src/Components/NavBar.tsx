@@ -1,10 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LogOut, User } from "lucide-react";
+import { useSupabase } from './SkillContext';
 
 const NavBar = () => {
-  const isAuthenticated = true;
-  const userName = "John Doe";
+  const supabase = useSupabase();
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const session = supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user || null);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        if (!error) setProfile(data);
+      } else {
+        setProfile(null);
+      }
+    };
+    fetchProfile();
+  }, [user, supabase]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/';
+  };
+
+  const isAuthenticated = !!user;
+  const userName = profile?.name || user?.email || "";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-lg shadow-lg border-b border-yellow-500">
@@ -64,8 +98,15 @@ const NavBar = () => {
                 </a>
 
                 <a
-href="/login"
-className="text-gray-300 hover:text-red-500 transition"
+                  href="/requests"
+                  className="inline-flex items-center px-4 py-1.5 rounded-md border border-yellow-500 text-sm font-medium text-yellow-400 hover:bg-yellow-500 hover:text-black transition"
+                >
+                  Requests
+                </a>
+
+                <a
+                  onClick={handleLogout}
+                  className="text-gray-300 hover:text-red-500 transition"
                 >
                   <LogOut className="h-5 w-5" />
                 </a>
@@ -159,7 +200,13 @@ className="text-gray-300 hover:text-red-500 transition"
                 >
                   Offer Skill
                 </a>
-                <a href="/login" className="text-red-400 px-2 text-left">
+                <a
+                  href="/requests"
+                  className="text-yellow-400 px-2 transition hover:text-yellow-300"
+                >
+                  Requests
+                </a>
+                <a onClick={handleLogout} className="text-red-400 px-2 text-left">
                   Logout
                 </a>
               </>
