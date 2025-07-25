@@ -58,7 +58,7 @@
 ## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/your-username/skillswapy.git
+git clone https://github.com/Malak-Sabry-104/SkillSwap.git
 cd skillswapy
 npm install
 npm run dev

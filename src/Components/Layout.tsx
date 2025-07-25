@@ -2,6 +2,7 @@ import { ToastContainer } from "react-toastify";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 const Layout = () => {
   useEffect(() => {
@@ -24,6 +25,3 @@ const Layout = () => {
 };
 
 export default Layout;
-function useEffect(arg0: () => void, arg1: never[]) {
-  throw new Error("Function not implemented.");
-}
