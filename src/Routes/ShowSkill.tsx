@@ -1,59 +1,65 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, User, Clock } from "lucide-react";
 import { toast } from "react-toastify";
-
-const allSkills = [
-  {
-    id: 1,
-    title: "Guitar Lessons for Beginners",
-    category: "Music",
-    level: "Beginner",
-    duration: "1 hour",
-    userName: "Sarah Johnson",
-    description:
-      "Learn basic chords and strumming patterns to get started with guitar. This comprehensive lesson covers fundamental techniques, proper posture, and your first songs. Perfect for complete beginners who want to start their musical journey.",
-  },
-  {
-    id: 2,
-    title: "Advanced Piano Techniques",
-    category: "Music",
-    level: "Advanced",
-    duration: "2 hours",
-    userName: "Robert Wilson",
-    description:
-      "Master advanced piano finger techniques, scales, and improvisation.",
-  },
-  {
-    id: 3,
-    title: "Violin for Beginners",
-    category: "Music",
-    level: "Beginner",
-    duration: "1 hour",
-    userName: "Maria Garcia",
-    description: "An introduction to violin basics and bow handling.",
-  },
-  {
-    id: 4,
-    title: "Music Theory Fundamentals",
-    category: "Music",
-    level: "Intermediate",
-    duration: "1.5 hours",
-    userName: "James Brown",
-    description:
-      "Understand notes, chords, and rhythm patterns to read sheet music.",
-  },
-];
+import { useEffect, useState } from "react";
+import { useSupabase } from "../Components/SkillContext";
 
 export default function SkillDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const skill = allSkills.find((s) => s.id === Number(id));
+  const supabase = useSupabase();
+  const [skill, setSkill] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
 
-  const related = allSkills.filter(
-    (s) => s.category === skill?.category && s.id !== skill.id
-  );
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user || null);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
-  if (!skill) {
+  useEffect(() => {
+    const fetchSkill = async () => {
+      setLoading(true);
+      setError("");
+      // Fetch skill by id
+      const { data, error } = await supabase.from("skills").select("*").eq("id", id).single();
+      if (error || !data) {
+        setError("Skill Not Found");
+        setLoading(false);
+        return;
+      }
+      setSkill(data);
+      // Fetch profile
+      const { data: profileData } = await supabase.from("profiles").select("name").eq("id", data.user_id).single();
+      setProfile(profileData);
+      // Fetch related skills
+      const { data: relatedSkills } = await supabase
+        .from("skills")
+        .select("*")
+        .eq("category", data.category)
+        .neq("id", id)
+        .limit(4);
+      setRelated(relatedSkills || []);
+      setLoading(false);
+    };
+    if (id) fetchSkill();
+  }, [id, supabase]);
+
+  if (loading) {
+    return <div className="text-center text-yellow-200 py-12 mt-[5rem]">Loading...</div>;
+  }
+
+  if (error || !skill) {
     return (
       <div className="text-center text-yellow-200 py-12 mt-[5rem]">
         <h1 className="text-3xl font-bold mb-4">Skill Not Found</h1>
@@ -77,7 +83,6 @@ export default function SkillDetailPage() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Browse
         </button>
-
         <div className="grid md:grid-cols-3 gap-8">
           {/* Left Main Skill Card */}
           <div className="md:col-span-2 bg-yellow-100/5 border border-yellow-500/20 p-8 rounded-2xl shadow-2xl backdrop-blur-md">
@@ -89,15 +94,13 @@ export default function SkillDetailPage() {
                 {skill.level}
               </span>
             </div>
-
             <h1 className="text-3xl font-bold mb-3">{skill.title}</h1>
             <p className="text-yellow-100/90 mb-6">{skill.description}</p>
-
             <div className="flex items-center gap-6 text-sm text-yellow-300 mb-6">
               <div className="flex items-center gap-2">
                 <User size={16} />
                 <span>
-                  Offered by <strong>{skill.userName}</strong>
+                  Offered by <strong>{profile?.name || skill.user_id}</strong>
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -107,22 +110,38 @@ export default function SkillDetailPage() {
                 </span>
               </div>
             </div>
-
             <button
-              onClick={() => {
-                toast.success(" Skill Requested Successfully!");
+              onClick={async () => {
+                if (!user) {
+                  toast.error("You must be logged in to request a skill.");
+                  return;
+                }
+                const { data: requesterProfile } = await supabase.from("profiles").select("email").eq("id", user.id).single();
+                const { error: reqError } = await supabase.from("requests").insert([
+                  {
+                    skill_id: skill.id,
+                    owner_id: skill.user_id,
+                    requester_id: user.id,
+                    requester_email: requesterProfile?.email || user.email,
+                  },
+                ]);
+                if (reqError) {
+                  toast.error("Failed to send request: " + reqError.message);
+                } else {
+                  toast.success("Skill Requested Successfully!");
+                }
               }}
               className="cursor-pointer bg-yellow-400 text-black px-6 py-2 rounded-lg hover:bg-yellow-300 transition font-semibold"
             >
               Request This Skill
             </button>
           </div>
-
           {/* Right Side - More Skills */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold mb-4">
               More {skill.category} Skills
             </h2>
+            {related.length === 0 && <div className="text-yellow-300">No related skills found.</div>}
             {related.map((s) => (
               <div
                 key={s.id}
@@ -131,7 +150,7 @@ export default function SkillDetailPage() {
                 <div>
                   <h3 className="font-semibold">{s.title}</h3>
                   <p className="text-xs text-yellow-300">{s.level}</p>
-                  <p className="text-sm text-yellow-400">By {s.userName}</p>
+                  <p className="text-sm text-yellow-400">By {s.user_id}</p>
                 </div>
                 <button
                   onClick={() => navigate(`/skill/${s.id}`)}
