@@ -1,10 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSkillContext } from "../Components/SkillContext";
+import { useSupabase } from "../Components/SkillContext";
 
 const Offer = () => {
-  const { addSkill } = useSkillContext();
+  const supabase = useSupabase();
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user || null);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   const [form, setForm] = useState({
     title: "",
@@ -30,17 +45,13 @@ const Offer = () => {
       level: "",
       duration: "",
     };
-
     if (!form.title.trim()) newErrors.title = "Title is required.";
     if (form.description.trim().length < 20)
       newErrors.description = "Description must be at least 20 characters.";
     if (!form.category) newErrors.category = "Please select a category.";
     if (!form.level) newErrors.level = "Please select a difficulty level.";
     if (!form.duration) newErrors.duration = "Please select a session duration.";
-
     setErrors(newErrors);
-
-    // Check if any error message exists
     return Object.values(newErrors).every((msg) => msg === "");
   };
 
@@ -49,31 +60,45 @@ const Offer = () => {
   ) => {
     const { id, value } = e.target;
     setForm((prev) => ({ ...prev, [id]: value }));
-    setErrors((prev) => ({ ...prev, [id]: "" })); // Clear error on change
+    setErrors((prev) => ({ ...prev, [id]: "" }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      const newSkill = {
-        id: Date.now(),
-        ...form,
-      };
-      addSkill(newSkill);
-      navigate("/my-skills");
+    setSubmitError("");
+    if (!validateForm()) return;
+    if (!user) {
+      setSubmitError("You must be logged in to offer a skill.");
+      return;
     }
+    setLoading(true);
+    const { error } = await supabase.from("skills").insert([
+      {
+        user_id: user.id,
+        ...form,
+      },
+    ]);
+    setLoading(false);
+    if (error) {
+      setSubmitError(error.message);
+      return;
+    }
+    navigate("/my-skills");
   };
 
   const inputStyle =
     "w-full h-10 px-3 py-2 text-sm rounded-md border bg-zinc-800 text-white placeholder-gray-500 focus:ring-2 focus:ring-yellow-500 outline-none";
   const errorStyle = "text-sm text-red-500";
 
+  if (!user) {
+    return <div className="mt-[5rem] text-center text-white">Please log in to offer a skill.</div>;
+  }
+
   return (
     <section className="flex-1 mt-[5rem] bg-black min-h-screen text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-4xl font-bold text-yellow-400 mb-3 text-center">Offer a Skill</h1>
-
           <form onSubmit={handleSubmit} className="bg-zinc-900/60 border border-yellow-500/30 rounded-2xl shadow-lg p-6 space-y-6 backdrop-blur-md">
             {/* Title */}
             <div>
@@ -87,7 +112,6 @@ const Offer = () => {
               />
               {errors.title && <p className={errorStyle}>{errors.title}</p>}
             </div>
-
             {/* Description */}
             <div>
               <label htmlFor="description" className="block text-sm font-medium">Description *</label>
@@ -101,7 +125,6 @@ const Offer = () => {
               <p className="text-sm text-gray-400">{form.description.length}/500 characters (min 20)</p>
               {errors.description && <p className={errorStyle}>{errors.description}</p>}
             </div>
-
             {/* Category & Level */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -124,7 +147,6 @@ const Offer = () => {
                 </select>
                 {errors.category && <p className={errorStyle}>{errors.category}</p>}
               </div>
-
               <div>
                 <label htmlFor="level" className="block text-sm font-medium">Level *</label>
                 <select
@@ -141,7 +163,6 @@ const Offer = () => {
                 {errors.level && <p className={errorStyle}>{errors.level}</p>}
               </div>
             </div>
-
             {/* Duration */}
             <div>
               <label htmlFor="duration" className="block text-sm font-medium">Session Duration *</label>
@@ -162,18 +183,15 @@ const Offer = () => {
               </select>
               {errors.duration && <p className={errorStyle}>{errors.duration}</p>}
             </div>
-
-            {/* Static Author */}
-            <div className="bg-zinc-800 px-4 py-3 border border-zinc-700 text-sm text-gray-300 rounded-lg">
-              <strong>Offered by:</strong> John Doe
-            </div>
-
+            {/* Error Message */}
+            {submitError && <div className="text-red-500 text-sm text-center">{submitError}</div>}
             {/* Submit */}
             <button
               type="submit"
               className="w-full h-10 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold rounded-md transition"
+              disabled={loading}
             >
-              Add Skill
+              {loading ? "Adding..." : "Add Skill"}
             </button>
           </form>
         </div>
