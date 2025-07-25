@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useSupabase } from '../Components/SkillContext';
 
 interface FormData {
   name: string;
@@ -16,9 +17,11 @@ interface FormErrors {
   password?: string;
   confirmPassword?: string;
   skills?: string;
+  general?: string;
 }
 
 export default function SignUpCard() {
+  const supabase = useSupabase();
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -27,8 +30,9 @@ export default function SignUpCard() {
     confirmPassword: "",
     skills: "",
   });
-
   const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
   const validate = (): FormErrors => {
     const newErrors: FormErrors = {};
@@ -64,13 +68,39 @@ export default function SignUpCard() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
-
+    setSuccess("");
     if (Object.keys(validationErrors).length === 0) {
-      alert("Form submitted successfully!");
+      setLoading(true);
+      // Sign up with Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (error) {
+        setErrors({ email: error.message });
+        setLoading(false);
+        return;
+      }
+      // Insert profile data
+      const { error: profileError } = await supabase.from('profiles').insert([
+        {
+          id: data.user?.id,
+          name: formData.name,
+          username: formData.username,
+          skills: formData.skills,
+          email: formData.email,
+        },
+      ]);
+      if (profileError) {
+        setErrors({ general: profileError.message });
+        setLoading(false);
+        return;
+      }
+      setSuccess('Registration successful! Please check your email to confirm your account.');
       setFormData({
         name: "",
         email: "",
@@ -79,6 +109,7 @@ export default function SignUpCard() {
         confirmPassword: "",
         skills: "",
       });
+      setLoading(false);
     }
   };
 
@@ -119,20 +150,22 @@ export default function SignUpCard() {
               )}
             </div>
           ))}
-
+          {errors.general && <p className="text-red-500 text-xs mt-1">{errors.general}</p>}
+          {success && <p className="text-green-500 text-xs mt-1">{success}</p>}
           <button
             type="submit"
             className="w-full py-3 bg-gradient-to-r from-yellow-300 to-yellow-400 text-black font-semibold rounded-xl mt-4 hover:opacity-90 transition"
+            disabled={loading}
           >
-            Sign Up
+            {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
 
         <p className="text-sm text-center text-gray-400 mt-6">
           Already have an account?{" "}
-          <span className="text-yellow-300 hover:underline cursor-pointer">
+          <a href="/login" className="text-yellow-300 hover:underline cursor-pointer">
             Log In
-          </span>
+          </a>
         </p>
       </div>
     </div>
